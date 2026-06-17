@@ -67,6 +67,25 @@ canvas {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Relic Display (below HUD, top-left)                                */
+/* ------------------------------------------------------------------ */
+
+#relic-display {
+  position: absolute;
+  top: 78px;
+  left: 20px;
+  display: flex;
+  gap: 6px;
+  font-size: 28px;
+  user-select: none;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 4px 10px;
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Zone Indicator (top-right)                                        */
 /* ------------------------------------------------------------------ */
 
@@ -148,78 +167,174 @@ canvas {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Map Screen Overlay                                                */
+/*  Map Screen Overlay (SVG-based)                                    */
 /* ------------------------------------------------------------------ */
 
-.map-screen {
+#map-screen {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.88);
   backdrop-filter: blur(6px);
-  display: flex;
+  z-index: 100;
+  pointer-events: auto;
+  display: none;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+}
+
+#map-svg {
+  width: 90%;
+  height: 90%;
   pointer-events: auto;
 }
 
-.map-panel {
-  background: #0a0a0f;
-  border: 2px solid #8b5cf6;
-  border-radius: 16px;
-  padding: 40px;
-  text-align: center;
+/* ------------------------------------------------------------------ */
+/*  Boss UI (top-center health bar)                                    */
+/* ------------------------------------------------------------------ */
+
+#boss-ui {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #a855f7;
+  border-radius: 12px;
+  padding: 10px 24px;
   min-width: 360px;
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
+  text-align: center;
+  z-index: 50;
+  pointer-events: none;
+  user-select: none;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
 }
 
-.map-panel h2 {
-  color: #a78bfa;
-  font-size: 28px;
-  margin-bottom: 4px;
-  letter-spacing: 3px;
-}
-
-.map-subtitle {
-  color: #6b7280;
-  font-size: 13px;
-  letter-spacing: 2px;
-  margin-bottom: 24px;
-  text-transform: uppercase;
-}
-
-.map-btn {
-  display: block;
-  width: 100%;
-  padding: 14px 20px;
-  margin-bottom: 12px;
-  background: #111118;
-  border: 1px solid #374151;
-  border-radius: 10px;
-  color: #e5e7eb;
-  font-family: 'Courier New', Courier, monospace;
+#boss-name {
+  color: #c084fc;
   font-size: 16px;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: left;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
 }
 
-.map-btn:hover {
-  border-color: #fbbf24;
+#boss-health-bg {
+  width: 100%;
+  height: 14px;
+  background: #1a1a2e;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid #4a1d6e;
+}
+
+#boss-health-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #f97316, #a855f7);
+  border-radius: 7px;
+  transition: width 0.2s ease;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Game Over & Victory Overlays                                       */
+/* ------------------------------------------------------------------ */
+
+#game-over-screen,
+#victory-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#game-over-screen {
+  background: radial-gradient(ellipse at center, #1a0000 0%, #000 70%);
+}
+
+#victory-screen {
+  background: radial-gradient(ellipse at center, #1a1200 0%, #000 70%);
+}
+
+.overlay-panel {
+  text-align: center;
+  padding: 48px 64px;
+  border-radius: 20px;
+  min-width: 420px;
+}
+
+.game-over-panel {
+  background: rgba(20, 0, 0, 0.9);
+  border: 2px solid #7f1d1d;
+  box-shadow: 0 0 60px rgba(127, 29, 29, 0.4);
+}
+
+.victory-panel {
+  background: rgba(20, 15, 0, 0.9);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 0 60px rgba(245, 158, 11, 0.4);
+}
+
+.overlay-panel h1 {
+  font-size: 42px;
+  margin-bottom: 12px;
+  letter-spacing: 4px;
+}
+
+.game-over-panel h1 {
+  color: #ef4444;
+  text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+.victory-panel h1 {
   color: #fbbf24;
-  background: #1a1a22;
-  box-shadow: 0 0 16px rgba(251, 191, 36, 0.1);
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
 }
 
-.map-btn.map-stay {
-  border-color: #374151;
+.overlay-panel p {
+  font-size: 16px;
   color: #9ca3af;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
 }
 
-.map-btn.map-stay:hover {
-  border-color: #6b7280;
-  color: #d1d5db;
+.play-again-btn {
+  padding: 14px 40px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.game-over-panel .play-again-btn {
+  background: #1a0000;
+  border: 2px solid #dc2626;
+  color: #fca5a5;
+}
+
+.game-over-panel .play-again-btn:hover {
+  background: #2a0000;
+  border-color: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+}
+
+.victory-panel .play-again-btn {
+  background: #1a1400;
+  border: 2px solid #f59e0b;
+  color: #fde68a;
+}
+
+.victory-panel .play-again-btn:hover {
+  background: #2a2000;
+  border-color: #fbbf24;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
 }

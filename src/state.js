@@ -17,6 +17,11 @@ export const state = {
     invulnerable: 0,
     armor: 0,
     armorTimer: 0,
+    dashCooldown: 0,
+    dashTimer: 0,
+    dashVx: 0,
+    dashVy: 0,
+    dashGhosts: [],
     stats: {
       VIT: 10,
       PWR: 2,
@@ -25,6 +30,7 @@ export const state = {
       JCE: 0,
       LCK: 1,
     },
+    relics: [],
   },
 
   camera: {
@@ -103,4 +109,11 @@ export const state = {
   isRoomCleared: false,
   roomType: '',
   chest: null,
+  gameState: 'playing',
+  boss: null,
+  shopRelics: [],
+  shopkeeper: null,
+  mapData: { nodes: [], rows: [], visited: {}, reachable: [] },
+  currentNodeIndex: -1,
+  totalEncounters: 0,
 };

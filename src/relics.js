@@ -1,0 +1,58 @@
+export const RELICS = [
+  {
+    id: 'lucky_coin',
+    name: 'Lucky Coin',
+    emoji: '\u{1FA99}',
+    cost: 20,
+    desc: '+2 to LCK stat.',
+  },
+  {
+    id: 'hollow_point',
+    name: 'Hollow Points',
+    emoji: '\u{1F78E}\uFE0F',
+    cost: 30,
+    desc: '+1 to all projectile damage.',
+  },
+  {
+    id: 'split_hand',
+    name: 'Split Hand',
+    emoji: '\u270C\uFE0F',
+    cost: 50,
+    desc: 'Fires a second projectile at 15\u00B0 offset.',
+  },
+  {
+    id: 'bullet_time',
+    name: 'Bullet Time',
+    emoji: '\u23F1\uFE0F',
+    cost: 30,
+    desc: '+20% projectile speed.',
+  },
+  {
+    id: 'kevlar_vest',
+    name: 'Kevlar Vest',
+    emoji: '\u{1F6E1}\uFE0F',
+    cost: 35,
+    desc: '+1 to ARM stat.',
+  },
+  {
+    id: 'blood_money',
+    name: 'Blood Money',
+    emoji: '\u{1F4B0}',
+    cost: 25,
+    desc: '1.5x gold from kills.',
+  },
+  {
+    id: 'glass_cannon',
+    name: 'Glass Cannon',
+    emoji: '\u{1F48E}',
+    cost: 40,
+    desc: '+2 PWR, -1 max HP.',
+  },
+  {
+    id: 'seven_up',
+    name: 'Seven Up',
+    emoji: '\u{1F3B0}',
+    cost: 45,
+    desc: 'Increased Green proc rate.',
+  },
+];
