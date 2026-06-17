@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0705;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+canvas {
+  display: block;
+  border: 3px solid #4a2818;
+  border-radius: 8px;
+  box-shadow:
+    0 0 40px rgba(100, 40, 20, 0.4),
+    inset 0 0 0 1px rgba(180, 100, 50, 0.1);
+}
