@@ -22,6 +22,12 @@ export const state = {
     dashVx: 0,
     dashVy: 0,
     dashGhosts: [],
+    characterId: null,
+    suit: null,
+    statusEffects: [],
+    activeCooldown: 0,
+    quirkState: {},
+    shotCount: 0,
     stats: {
       VIT: 10,
       PWR: 2,
@@ -95,8 +101,8 @@ export const state = {
   ],
 
   enemies: [
-    { x: 1400, y: 1300, emoji: '\u{1F480}', hp: 2, speed: 2, radius: 20, type: 'melee', cooldown: 0 },
-    { x: 1650, y: 1500, emoji: '\u{1F574}\uFE0F', hp: 1, speed: 0, radius: 20, type: 'ranged', cooldown: 0 },
+    { x: 1400, y: 1300, emoji: '\u{1F480}', hp: 2, speed: 2, radius: 20, type: 'melee', cooldown: 0, suit: 'clubs', statusEffects: [] },
+    { x: 1650, y: 1500, emoji: '\u{1F574}\uFE0F', hp: 1, speed: 0, radius: 20, type: 'ranged', cooldown: 0, suit: 'diamonds', statusEffects: [] },
   ],
 
   enemyProjectiles: [],
@@ -104,9 +110,12 @@ export const state = {
   projectiles: [],
 
   visualEffects: [],
+  obstacles: [],
 
   log: [],
+  isPaused: false,
   isRoomCleared: false,
+  deferredMap: false,
   roomType: '',
   chest: null,
   gameState: 'playing',
@@ -116,4 +125,17 @@ export const state = {
   mapData: { nodes: [], rows: [], visited: {}, reachable: [] },
   currentNodeIndex: -1,
   totalEncounters: 0,
+  currentNodeType: 'Normal',
+  runSoulChips: 0,
+  runFreeRespins: 0,
+  meta: {
+    soulChips: 0,
+    unlockedCharacters: ['luciano'],
+    upgrades: {
+      startingGold: 0,
+      extraHp: 0,
+      canRespinChest: 0,
+      startWithRelic: false,
+    },
+  },
 };

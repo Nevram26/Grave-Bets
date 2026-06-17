@@ -1,9 +1,73 @@
 import { state } from './state.js';
+import { SUIT_ICONS } from './suits.js';
+import { CHARACTERS } from './characters.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const EMOJI_FONT = '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif';
+
+function drawStatusIndicators(entity, x, y, offsetY = 0) {
+  if (!entity.statusEffects || entity.statusEffects.length === 0) return;
+  let idx = 0;
+  for (const s of entity.statusEffects) {
+    const sy = y - offsetY - idx * 18;
+    ctx.font = '14px Segoe UI Emoji';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowBlur = 0;
+    switch (s.type) {
+      case 'burn':
+        ctx.fillStyle = '#f97316';
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur = 8;
+        ctx.fillText('\uD83D\uDD25', x, sy);
+        break;
+      case 'slow':
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.arc(x, sy, 10, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#3b82f6';
+        ctx.font = '10px Courie New';
+        ctx.fillText('SLOW', x, sy + 2);
+        break;
+      case 'stun':
+        ctx.fillStyle = '#eab308';
+        ctx.shadowColor = '#eab308';
+        ctx.shadowBlur = 10;
+        ctx.font = '18px Segoe UI Emoji';
+        ctx.fillText('Z', x, sy);
+        break;
+      case 'bleed':
+        ctx.fillStyle = '#ef4444';
+        ctx.shadowColor = '#ef4444';
+        ctx.shadowBlur = 6;
+        ctx.font = '16px Segoe UI Emoji';
+        ctx.fillText('\uD83E\uDE78', x, sy);
+        break;
+    }
+    ctx.shadowBlur = 0;
+    idx++;
+  }
+}
+
+function drawSuitIcon(entity, x, y) {
+  if (!entity.suit) return;
+  const icon = SUIT_ICONS[entity.suit];
+  if (!icon) return;
+  ctx.font = '14px Segoe UI Emoji';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#e5e7eb';
+  ctx.shadowColor = '#e5e7eb';
+  ctx.shadowBlur = 4;
+  ctx.fillText(icon, x, y);
+  ctx.shadowBlur = 0;
+}
 
 export function resizeCanvas() {
   const parent = canvas.parentElement;
@@ -11,12 +75,9 @@ export function resizeCanvas() {
   canvas.height = parent.clientHeight;
 }
 
-export function draw() {
+function drawBackground() {
   ctx.fillStyle = '#020617';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.save();
-  ctx.translate(canvas.width / 2 - state.camera.x, canvas.height / 2 - state.camera.y);
 
   const gs = 80;
   const sx = Math.floor((state.camera.x - canvas.width / 2) / gs) * gs;
@@ -28,7 +89,9 @@ export function draw() {
   ctx.lineWidth = 1;
   for (let x = sx; x < ex; x += gs) { ctx.beginPath(); ctx.moveTo(x, sy); ctx.lineTo(x, ey); ctx.stroke(); }
   for (let y = sy; y < ey; y += gs) { ctx.beginPath(); ctx.moveTo(sx, y); ctx.lineTo(ex, y); ctx.stroke(); }
+}
 
+function drawCorridors() {
   for (const c of state.corridors) {
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(c.x, c.y, c.w, c.h);
@@ -36,7 +99,9 @@ export function draw() {
     ctx.lineWidth = 2;
     ctx.strokeRect(c.x, c.y, c.w, c.h);
   }
+}
 
+function drawRooms() {
   for (const room of state.rooms) {
     ctx.fillStyle = room.bgColor;
     ctx.fillRect(room.x, room.y, room.w, room.h);
@@ -104,12 +169,71 @@ export function draw() {
       }
     }
   }
+}
 
+function drawObstacles() {
+  for (const obs of state.obstacles) {
+    if (obs.type === 'crate') {
+      ctx.fillStyle = '#78350f';
+      ctx.shadowColor = '#451a03';
+      ctx.shadowBlur = 15;
+      ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#92400e';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+      ctx.strokeStyle = '#451a03';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(obs.x + obs.w / 2, obs.y);
+      ctx.lineTo(obs.x + obs.w / 2, obs.y + obs.h);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(obs.x, obs.y + obs.h / 2);
+      ctx.lineTo(obs.x + obs.w, obs.y + obs.h / 2);
+      ctx.stroke();
+    } else if (obs.type === 'pillar') {
+      ctx.fillStyle = '#1e293b';
+      ctx.shadowColor = '#0f172a';
+      ctx.shadowBlur = 20;
+      ctx.beginPath();
+      ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(obs.x, obs.y, obs.r * 0.7, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawEnemies() {
   ctx.font = `48px ${EMOJI_FONT}`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (const enemy of state.enemies) {
     ctx.fillText(enemy.emoji, enemy.x, enemy.y);
+    if (enemy.attackReady) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(239,68,68,0.5)';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([]);
+      ctx.shadowColor = '#ef4444';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(enemy.x, enemy.y, (enemy.radius || 20) + 6, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    drawSuitIcon(enemy, enemy.x, enemy.y - 40);
+    drawStatusIndicators(enemy, enemy.x, enemy.y + 30);
   }
 
   if (state.boss) {
@@ -119,26 +243,25 @@ export function draw() {
     ctx.textBaseline = 'middle';
     ctx.fillText(state.boss.emoji, state.boss.x, state.boss.y);
     ctx.globalAlpha = 1;
+    drawSuitIcon(state.boss, state.boss.x, state.boss.y - 60);
+    drawStatusIndicators(state.boss, state.boss.x, state.boss.y + 50);
   }
+}
 
+function drawInteractables() {
   if (state.chest) {
+    const chest = state.chest;
     ctx.font = `48px ${EMOJI_FONT}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(state.chest.emoji, state.chest.x, state.chest.y);
-    ctx.font = '24px Courier New';
-    ctx.fillStyle = '#ffd700';
-    ctx.shadowColor = '#ffd700';
-    ctx.shadowBlur = 8;
-    ctx.fillText(`${state.chest.cost}G`, state.chest.x, state.chest.y - 50);
-    ctx.shadowBlur = 0;
-    const dist = Math.hypot(state.player.x - state.chest.x, state.player.y - state.chest.y);
-    if (dist < 80) {
+    ctx.fillText(chest.emoji, chest.x, chest.y);
+    const dist = Math.hypot(state.player.x - chest.x, state.player.y - chest.y);
+    if (dist < 80 && !chest.used) {
       ctx.font = '18px Courier New';
       ctx.fillStyle = '#fbbf24';
       ctx.shadowColor = '#fbbf24';
       ctx.shadowBlur = 6;
-      ctx.fillText('[E] Open', state.chest.x, state.chest.y + 50);
+      ctx.fillText('[E] Open Chest', chest.x, chest.y + 50);
       ctx.shadowBlur = 0;
     }
   }
@@ -183,7 +306,9 @@ export function draw() {
       ctx.fillText('[E] Buy', relic.x, relic.y + 75);
     }
   }
+}
 
+function drawProjectiles() {
   for (const proj of state.projectiles) {
     if (proj.roundType === 'red') {
       ctx.fillStyle = '#ef4444';
@@ -214,12 +339,14 @@ export function draw() {
     ctx.fillText('\uD83C\uDFB2', proj.x, proj.y);
     ctx.shadowBlur = 0;
   }
+}
 
+function drawEffects() {
   for (const eff of state.visualEffects) {
     ctx.globalAlpha = eff.alpha ?? 1;
-    ctx.fillStyle = '#f97316';
-    ctx.shadowColor = '#ea580c';
-    ctx.shadowBlur = 20;
+    ctx.fillStyle = eff.color ?? '#f97316';
+    ctx.shadowColor = eff.shadowColor ?? '#ea580c';
+    ctx.shadowBlur = eff.shadowBlur ?? 20;
     ctx.beginPath();
     ctx.arc(eff.x, eff.y, eff.radius ?? 5, 0, Math.PI * 2);
     ctx.fill();
@@ -239,7 +366,9 @@ export function draw() {
     ctx.globalAlpha = 1;
     state.player.dashGhosts = state.player.dashGhosts.filter(g => g.alpha > 0);
   }
+}
 
+function drawPlayer() {
   ctx.shadowColor = '#f59e0b';
   ctx.shadowBlur = 12;
   ctx.font = `36px ${EMOJI_FONT}`;
@@ -247,6 +376,8 @@ export function draw() {
   ctx.textBaseline = 'middle';
   ctx.fillText(state.player.emoji, state.player.x, state.player.y);
   ctx.shadowBlur = 0;
+  drawSuitIcon(state.player, state.player.x, state.player.y - state.player.radius - 44);
+  drawStatusIndicators(state.player, state.player.x, state.player.y + state.player.radius + 10);
 
   if (state.player.invulnerable > 0) {
     ctx.strokeStyle = '#ef4444';
@@ -270,6 +401,88 @@ export function draw() {
     ctx.shadowBlur = 0;
   }
 
+  const char = CHARACTERS[state.player.characterId];
+  if (char && char.attackType === 'melee' && char.meleeRange) {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 6]);
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(state.player.x, state.player.y, char.meleeRange, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    for (const enemy of state.enemies) {
+      const dist = Math.hypot(enemy.x - state.player.x, enemy.y - state.player.y);
+      if (dist < char.meleeRange) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(251,191,36,0.3)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, (enemy.radius || 20) + 4, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+
+  const qs = state.player.quirkState;
+  if (state.player.characterId === 'valerie') {
+    const counter = (state.player.shotCount || 0) % 5;
+    ctx.font = '16px Courier New';
+    ctx.fillStyle = '#fbbf24';
+    ctx.shadowColor = '#fbbf24';
+    ctx.shadowBlur = 4;
+    ctx.textAlign = 'center';
+    ctx.fillText(`\uD83C\uDCCF ${counter}/5`, state.player.x, state.player.y - state.player.radius - 18);
+    ctx.shadowBlur = 0;
+  }
+
+  if (state.player.characterId === 'roxanne' && qs.blackjack > 0) {
+    ctx.font = '16px Courier New';
+    ctx.fillStyle = qs.blackjack >= 21 ? '#ef4444' : '#10b981';
+    ctx.shadowColor = qs.blackjack >= 21 ? '#ef4444' : '#10b981';
+    ctx.shadowBlur = 6;
+    ctx.textAlign = 'center';
+    ctx.fillText(`\uD83C\uDFB0 ${qs.blackjack}/21`, state.player.x, state.player.y - state.player.radius - 18);
+    ctx.shadowBlur = 0;
+  }
+
+  if (qs.busterBoostTimer > 0) {
+    ctx.font = '14px Courier New';
+    ctx.fillStyle = '#f97316';
+    ctx.shadowColor = '#f97316';
+    ctx.shadowBlur = 6;
+    ctx.textAlign = 'center';
+    ctx.fillText('MAX BET', state.player.x, state.player.y - state.player.radius - 18);
+    ctx.shadowBlur = 0;
+  }
+
+  if (qs.silasSpeedTimer > 0) {
+    ctx.font = '14px Courier New';
+    ctx.fillStyle = '#60a5fa';
+    ctx.shadowColor = '#60a5fa';
+    ctx.shadowBlur = 6;
+    ctx.textAlign = 'center';
+    ctx.fillText('\u26A8 LOADED DICE', state.player.x, state.player.y - state.player.radius - 18);
+    ctx.shadowBlur = 0;
+  }
+
+  if (qs.lucianoRedCount > 0) {
+    ctx.font = '14px Courier New';
+    ctx.fillStyle = '#ef4444';
+    ctx.shadowColor = '#ef4444';
+    ctx.shadowBlur = 6;
+    ctx.textAlign = 'center';
+    ctx.fillText(`\uD83D\uDD25 RED x${qs.lucianoRedCount}`, state.player.x, state.player.y - state.player.radius - 18);
+    ctx.shadowBlur = 0;
+  }
+}
+
+function drawAim() {
   const angle = Math.atan2(state.mouse.worldY - state.player.y, state.mouse.worldX - state.player.x);
   ctx.strokeStyle = '#000';
   ctx.lineWidth = 3;
@@ -289,6 +502,20 @@ export function draw() {
   ctx.moveTo(state.mouse.worldX, state.mouse.worldY - 12);
   ctx.lineTo(state.mouse.worldX, state.mouse.worldY + 12);
   ctx.stroke();
+}
 
+export function draw() {
+  ctx.save();
+  ctx.translate(canvas.width / 2 - state.camera.x, canvas.height / 2 - state.camera.y);
+  drawBackground();
+  drawCorridors();
+  drawRooms();
+  drawObstacles();
+  drawEnemies();
+  drawInteractables();
+  drawProjectiles();
+  drawEffects();
+  drawPlayer();
+  drawAim();
   ctx.restore();
 }

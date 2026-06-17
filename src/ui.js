@@ -1,5 +1,30 @@
 import { state } from './state.js';
 import { generateRoom } from './rooms.js';
+import { saveRun } from './storage.js';
+
+const NODE_ICONS = {
+  Normal: '\u2694\uFE0F',
+  Elite: '\uD83D\uDC80',
+  Treasure: '\uD83D\uDCB0',
+  Shop: '\uD83C\uDFEA',
+  Boss: '\uD83D\uDC51',
+};
+
+export function populateSaveSlots(containerId) {
+  const container = document.getElementById(containerId || 'save-run-slots');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'save-slot-btn';
+    btn.textContent = `Slot ${i + 1}`;
+    btn.addEventListener('click', () => {
+      saveRun(state, i);
+      location.reload();
+    });
+    container.appendChild(btn);
+  }
+}
 
 export function renderMapUI() {
   const mapOverlay = document.getElementById('map-screen');
@@ -40,8 +65,8 @@ export function renderMapUI() {
     const rowIdx = mapData.rows.indexOf(row);
     const colIdx = row.nodes.indexOf(i);
     const totalCols = row.nodes.length;
-    n.cx = padding + ((colIdx + 0.5) / totalCols) * usableW;
-    n.cy = padding + ((rowIdx + 0.5) / mapData.rows.length) * usableH;
+    n.cx = padding + ((rowIdx + 0.5) / mapData.rows.length) * usableW;
+    n.cy = padding + ((colIdx + 0.5) / totalCols) * usableH;
   }
 
   const drawnEdges = new Set();
@@ -94,14 +119,26 @@ export function renderMapUI() {
     }
     circle.setAttribute('data-index', i);
     g.appendChild(circle);
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', n.cx);
-    text.setAttribute('y', n.cy + nodeRadius + 16);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('fill', '#e5e7eb');
-    text.setAttribute('font-size', '12');
-    text.textContent = n.label || n.type;
-    g.appendChild(text);
+
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    icon.setAttribute('x', n.cx);
+    icon.setAttribute('y', n.cy + 1);
+    icon.setAttribute('text-anchor', 'middle');
+    icon.setAttribute('dominant-baseline', 'central');
+    icon.setAttribute('font-size', '18');
+    icon.setAttribute('pointer-events', 'none');
+    icon.textContent = NODE_ICONS[n.type] || '\u2753';
+    g.appendChild(icon);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', n.cx);
+    label.setAttribute('y', n.cy + nodeRadius + 16);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('fill', '#e5e7eb');
+    label.setAttribute('font-size', '12');
+    label.setAttribute('pointer-events', 'none');
+    label.textContent = n.label || n.type;
+    g.appendChild(label);
     svg.appendChild(g);
   }
 
@@ -113,6 +150,8 @@ export function renderMapUI() {
   helpText.setAttribute('font-size', '14');
   helpText.textContent = 'Click a gold node to travel | Close (ESC) to stay';
   svg.appendChild(helpText);
+
+  populateSaveSlots('save-run-slots');
 }
 
 export function onNodeClick(e) {
@@ -127,8 +166,10 @@ export function onNodeClick(e) {
   const node = mapData.nodes[index];
   if (!mapData.visited) mapData.visited = {};
   mapData.visited[index] = true;
+  state.isPaused = false;
   state.currentNodeIndex = index;
   state.totalEncounters = (state.totalEncounters || 0) + 1;
   document.getElementById('map-screen').style.display = 'none';
-  generateRoom('combat', node.type);
+  const roomType = node.type === 'Shop' ? 'shop' : node.type === 'Treasure' ? 'treasure' : 'combat';
+  generateRoom(roomType, node.type);
 }

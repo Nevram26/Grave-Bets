@@ -11,9 +11,12 @@
     <canvas id="gameCanvas"></canvas>
 
     <div id="hud">
+      <span class="stat character" id="charDisplay"></span>
       <span class="stat health" id="healthDisplay">&#x2764;&#xFE0F; Health: 10</span>
       <span class="stat gold" id="goldDisplay">&#x1F4B0; Gold: 0</span>
+      <span class="stat chips" id="soulChipDisplay">&#x1FADB; Chips: 0</span>
       <span class="stat armor" id="armorDisplay" style="display:none">&#x1F6E1;&#xFE0F; Armor: 0</span>
+      <span class="stat suit" id="suitDisplay" style="display:none"></span>
     </div>
 
     <div id="relic-display"></div>
@@ -31,15 +34,40 @@
       </div>
     </div>
 
+    <div id="pause-screen" style="display:none">
+      <div class="pause-panel">
+        <h1 class="pause-title">&#x23F8;&#xFE0F; PAUSED</h1>
+        <button class="pause-btn" id="pause-resume-btn">&#x25B6;&#xFE0F; Resume</button>
+        <button class="pause-btn" id="pause-save-btn">&#x1F4BE; Save &amp; Return</button>
+        <div id="pause-save-slots" class="run-slots" style="display:none"></div>
+        <button class="pause-btn quit-btn" id="pause-quit-btn">&#x1F6AA; Back to Lounge</button>
+      </div>
+    </div>
+
     <div id="map-screen" style="display:none">
       <svg id="map-svg"></svg>
+    </div>
+
+    <div id="active-cd-container" style="display:none">
+      <div id="active-cd-label">ABILITY</div>
+      <div id="active-cd-bar">
+        <div id="active-cd-fill"></div>
+      </div>
+    </div>
+
+    <div id="character-select-screen">
+      <div class="char-select-panel">
+        <h1>CHOOSE YOUR GAMBLER</h1>
+        <div id="char-cards"></div>
+      </div>
     </div>
 
     <div id="game-over-screen">
       <div class="overlay-panel game-over-panel">
         <h1>&#x1F480; GAME OVER</h1>
         <p>The house always wins...</p>
-        <button class="play-again-btn" onclick="location.reload()">&#x1F3B0; Play Again</button>
+        <div class="cash-out-display" id="cash-out-display"></div>
+        <button class="play-again-btn" id="game-over-btn">&#x1F3B0; Back to Lounge</button>
       </div>
     </div>
 
@@ -47,10 +75,45 @@
       <div class="overlay-panel victory-panel">
         <h1>&#x1F451; YOU BROKE THE HOUSE</h1>
         <p>You defeated the Pitboss and escaped Grave Bets!</p>
-        <button class="play-again-btn" onclick="location.reload()">&#x1F3B0; Play Again</button>
+        <div class="cash-out-display" id="victory-cash-out-display"></div>
+        <button class="play-again-btn" id="victory-btn">&#x1F3B0; Back to Lounge</button>
       </div>
     </div>
   </div>
+
+    <div id="chest-panel" style="display:none">
+      <div class="chest-panel-inner">
+        <h2 class="chest-title">&#x1F9F0; TREASURE VAULT</h2>
+        <div id="chest-relic-display" class="chest-relic-display"></div>
+        <div class="chest-buttons">
+          <button id="chest-take-btn" class="chest-btn take-btn">&#x2705; Take Relic</button>
+          <button id="chest-respin-btn" class="chest-btn respin-btn">&#x1F3B2; Re-spin</button>
+        </div>
+        <p id="chest-respin-cost" class="chest-respin-cost"></p>
+      </div>
+    </div>
+
+    <div id="executive-lounge-screen">
+      <div class="lounge-panel">
+        <h1 class="lounge-title">&#x1F3B0; THE EXECUTIVE LOUNGE</h1>
+        <div class="lounge-chips">&#x1FADB; <span id="lounge-chip-count">0</span> Soul Chips</div>
+
+        <div class="lounge-upgrades" id="lounge-upgrades">
+          <button class="lounge-btn" data-upgrade="unlock_val">&#x231B; Unlock Lady Val [50 Chips]</button>
+          <button class="lounge-btn" data-upgrade="starting_gold">&#x1F4B0; Bribe the Dealer: +20 Gold [15 Chips]</button>
+          <button class="lounge-btn" data-upgrade="extra_hp">&#x2764;&#xFE0F; High Roller's Health: +10 HP [25 Chips]</button>
+          <button class="lounge-btn" data-upgrade="respin_chest">&#x1F3B2; Sunk-Cost Insurance: Free Re-spins [40/60/80 Chips]</button>
+          <button class="lounge-btn" data-upgrade="start_relic">&#x1F3AF; The Loaded Die: Start with Relic [60 Chips]</button>
+        </div>
+
+        <div class="lounge-saved-runs">
+          <h2>&#x1F4C2; SAVED RUNS</h2>
+          <div id="lounge-run-slots" class="run-slots"></div>
+        </div>
+
+        <button class="lounge-hit-floor" id="hit-floor-btn">&#x1F0CF; Hit the Floor</button>
+      </div>
+    </div>
 
   <script type="module" src="./src/main.js"></script>
 </body>

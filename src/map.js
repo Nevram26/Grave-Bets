@@ -29,7 +29,8 @@ export function generateMapData() {
     const row = [];
     for (let i = 0; i < count; i++) {
       const idx = nodes.length;
-      nodes.push({ type: pickType(), label: pickType(), connections: [] });
+      const t = pickType();
+      nodes.push({ type: t, label: t, connections: [] });
       row.push(idx);
     }
     rows.push({ nodes: row });
@@ -46,10 +47,24 @@ export function generateMapData() {
     const nextRow = rows[r + 1].nodes;
 
     for (const nodeIdx of currentRow) {
+      const colIdx = currentRow.indexOf(nodeIdx);
+      const totalCols = currentRow.length;
+      const nextCount = nextRow.length;
+      const ratio = totalCols > 1 ? colIdx / (totalCols - 1) : 0.5;
+      const target = Math.round(ratio * (nextCount - 1));
       const numChildren = 1 + (Math.random() < 0.5 ? 1 : 0);
-      const available = [...nextRow].sort(() => Math.random() - 0.5);
-      for (let k = 0; k < Math.min(numChildren, available.length); k++) {
-        nodes[nodeIdx].connections.push(available[k]);
+      const children = [nextRow[target]];
+      if (numChildren > 1) {
+        const adj = Math.random() < 0.5 ? -1 : 1;
+        const adjCol = Math.max(0, Math.min(nextCount - 1, target + adj));
+        if (adjCol !== target && !children.includes(nextRow[adjCol])) {
+          children.push(nextRow[adjCol]);
+        }
+      }
+      for (const child of children) {
+        if (!nodes[nodeIdx].connections.includes(child)) {
+          nodes[nodeIdx].connections.push(child);
+        }
       }
     }
 
