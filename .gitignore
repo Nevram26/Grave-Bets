@@ -1,0 +1,12 @@
+# Added by code-review-graph
+.code-review-graph/
+
+# OpenCode AI
+opencode.json
+opencode.jsonc
+.mcp.json
+mcp.json
+.opencode/
+
+# AI agent skills
+.claude/

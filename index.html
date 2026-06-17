@@ -7,7 +7,32 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <canvas id="gameCanvas"></canvas>
+  <div id="game-wrapper">
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="hud">
+      <span class="stat health" id="healthDisplay">&#x2764;&#xFE0F; Health: 10</span>
+      <span class="stat gold" id="goldDisplay">&#x1F4B0; Gold: 0</span>
+      <span class="stat armor" id="armorDisplay" style="display:none">&#x1F6E1;&#xFE0F; Armor: 0</span>
+    </div>
+
+    <div id="zone-indicator">
+      <span id="zoneLabel">CURRENT ZONE: LOADING...</span>
+    </div>
+
+    <div id="actionLog"></div>
+
+    <div id="map-screen" class="map-screen" style="display:none">
+      <div class="map-panel">
+        <h2>⬆ ELEVATOR ⬆</h2>
+        <p class="map-subtitle">SELECT DESTINATION</p>
+        <button class="map-btn" data-room="combat">🎰 Penny Slots — Combat</button>
+        <button class="map-btn" data-room="treasure">🏦 The Vault — Treasure</button>
+        <button class="map-btn map-stay">❌ Close Map / Stay</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>

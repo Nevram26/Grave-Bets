@@ -7,19 +7,219 @@
 }
 
 body {
-  background: #0d0705;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  background: #020617;
+  overflow: hidden;
   font-family: 'Courier New', Courier, monospace;
+}
+
+#game-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-width: 800px;
+  min-height: 600px;
 }
 
 canvas {
   display: block;
-  border: 3px solid #4a2818;
-  border-radius: 8px;
-  box-shadow:
-    0 0 40px rgba(100, 40, 20, 0.4),
-    inset 0 0 0 1px rgba(180, 100, 50, 0.1);
+  width: 100%;
+  height: 100%;
+}
+
+/* ------------------------------------------------------------------ */
+/*  HUD — Health & Gold (top-left)                                    */
+/* ------------------------------------------------------------------ */
+
+#hud {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 24px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #3a1f12;
+  border-radius: 10px;
+  padding: 10px 20px;
+  backdrop-filter: blur(4px);
+  user-select: none;
+  pointer-events: none;
+}
+
+.stat {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.stat.health {
+  color: #ff4444;
+  text-shadow: 0 0 8px rgba(255, 68, 68, 0.35);
+}
+
+.stat.gold {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.35);
+}
+
+.stat.armor {
+  color: #10b981;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Zone Indicator (top-right)                                        */
+/* ------------------------------------------------------------------ */
+
+#zone-indicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #3a1f12;
+  border-radius: 10px;
+  padding: 8px 18px;
+  backdrop-filter: blur(4px);
+  user-select: none;
+  pointer-events: none;
+}
+
+#zoneLabel {
+  color: #fbbf24;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.2);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Action Log (bottom-left)                                          */
+/* ------------------------------------------------------------------ */
+
+#actionLog {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 420px;
+  max-height: 150px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #3a1f12;
+  border-radius: 10px;
+  padding: 10px 14px;
+  overflow-y: auto;
+  backdrop-filter: blur(4px);
+  user-select: none;
+  pointer-events: none;
+}
+
+#actionLog::-webkit-scrollbar {
+  width: 6px;
+}
+
+#actionLog::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#actionLog::-webkit-scrollbar-thumb {
+  background: #3a1f12;
+  border-radius: 3px;
+}
+
+.log-entry {
+  color: #c8a87c;
+  font-size: 13px;
+  padding: 2px 0;
+  line-height: 1.4;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-entry.win {
+  color: #ffd700;
+}
+
+.log-entry.lose {
+  color: #ff4444;
+}
+
+.log-entry.info {
+  color: #88aacc;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Map Screen Overlay                                                */
+/* ------------------------------------------------------------------ */
+
+.map-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.map-panel {
+  background: #0a0a0f;
+  border: 2px solid #8b5cf6;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  min-width: 360px;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
+}
+
+.map-panel h2 {
+  color: #a78bfa;
+  font-size: 28px;
+  margin-bottom: 4px;
+  letter-spacing: 3px;
+}
+
+.map-subtitle {
+  color: #6b7280;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.map-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  margin-bottom: 12px;
+  background: #111118;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  color: #e5e7eb;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.map-btn:hover {
+  border-color: #fbbf24;
+  color: #fbbf24;
+  background: #1a1a22;
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.1);
+}
+
+.map-btn.map-stay {
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+.map-btn.map-stay:hover {
+  border-color: #6b7280;
+  color: #d1d5db;
 }
