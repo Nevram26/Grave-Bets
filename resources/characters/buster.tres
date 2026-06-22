@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/CharacterResource.gd" id="1_5l3j"]
+
+[resource]
+script = ExtResource("1_5l3j")
+id = "buster"
+char_name = "\"Buster\" Malone"
+emoji = "👊"
+description = "Slot Fist — Melee slot-machine brawler."
+attack_type = "melee"
+radius = 20.0
+speed = 4.5
+hp = 14
+max_hp = 14
+stats = {
+"VIT": 14,
+"PWR": 1,
+"ARM": 2,
+"SPD": 4,
+"JCE": 0,
+"LCK": 1
+}
+suit = "clubs"
+active_name = "Max Bet"
+active_description = "Double attack speed + boosted slot odds for 6s."
+passive_description = "Cherries=Fire, Diamonds=Armor, 777=Gold blast, Bust=-1 HP."
+melee_range = 60.0

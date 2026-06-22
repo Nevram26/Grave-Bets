@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/CharacterResource.gd" id="1_5l3j"]
+
+[resource]
+script = ExtResource("1_5l3j")
+id = "silas"
+char_name = "Silas Vance"
+emoji = "🧑‍🎨"
+description = "Whip Specialist — Medium-range melee with 2d6 dice."
+attack_type = "melee"
+radius = 16.0
+speed = 5.0
+hp = 10
+max_hp = 10
+stats = {
+"VIT": 10,
+"PWR": 2,
+"ARM": 0,
+"SPD": 5,
+"JCE": 0,
+"LCK": 3
+}
+suit = ""
+active_name = "Loaded Dice"
+active_description = "Force Snake Eyes (2), take 1 HP, double speed for 5s."
+passive_description = "2d6: 7/11=knockback, 2=self-dmg+speed, 3-6=stack +20% dmg buff."
+melee_range = 150.0

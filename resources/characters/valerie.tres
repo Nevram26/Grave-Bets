@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/CharacterResource.gd" id="1_5l3j"]
+
+[resource]
+script = ExtResource("1_5l3j")
+id = "valerie"
+char_name = "Lady Val"
+emoji = "👸"
+description = "Card Thrower — Piercing projectiles that hit multiple enemies."
+attack_type = "ranged"
+radius = 16.0
+speed = 5.5
+hp = 8
+max_hp = 8
+stats = {
+"VIT": 8,
+"PWR": 3,
+"ARM": 0,
+"SPD": 6,
+"JCE": 0,
+"LCK": 2
+}
+suit = "spades"
+active_name = "Ante Up"
+active_description = "Gravity trap pulls + damages enemies in 150px for 3s."
+passive_description = "Every 5th throw is a Joker dealing +2 bonus damage."
+melee_range = 60.0
