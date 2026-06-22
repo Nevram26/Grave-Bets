@@ -6,3 +6,71 @@
 script = ExtResource("1_main")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="GameWorld" type="Node2D" parent="."]
+visible = false
+
+[node name="Lounge" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="Lounge"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterSelect" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Control" type="Control" parent="CharacterSelect"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HUD" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Control" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Control" type="Control" parent="PauseMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverScreen" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Control" type="Control" parent="GameOverScreen"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VictoryScreen" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Control" type="Control" parent="VictoryScreen"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
