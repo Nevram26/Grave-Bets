@@ -32,6 +32,15 @@ export function procRoxanneBlackjack(state, logBust = true) {
 
 export function meleeKill(target, state, dmg, msg) {
   if (target === state.boss) { defeatBoss(state); return; }
+  if (target.isBossPart) {
+    state.boss.hp -= dmg;
+    addLog(`\u{1F5E1}\uFE0F Sister HP: ${state.boss.hp}/${state.boss.maxHp}`, 'info');
+    if (state.boss.hp <= 0) {
+      state.enemies = state.enemies.filter(e => e.hp > 0 && !e.isBossPart);
+      defeatBoss(state);
+    }
+    return;
+  }
   target.hp -= dmg;
   if (target.hp <= 0) {
     state.player.gold += Math.floor(Math.random() * 11) + 5;
@@ -48,22 +57,31 @@ export function defeatBoss(state) {
   if (!boss) return;
   const goldReward = 50 + Math.floor(Math.random() * 51);
   state.player.gold += goldReward;
-  const cashChips = Math.floor(state.player.gold / 10);
-  state.runSoulChips += cashChips;
-  state.meta.soulChips += state.runSoulChips;
   addLog('\u{1F451} BOSS DEFEATED!', 'win');
   state.visualEffects.push({ x: boss.x, y: boss.y, radius: 20, alpha: 0.9 });
   state.boss = null;
-  state.gameState = 'victory';
-  const display = document.getElementById('victory-cash-out-display');
-  if (cashChips > 0 || state.runSoulChips > 0) {
-    display.textContent = `Cashed out ${state.player.gold} Gold for ${cashChips} Chips! Total this run: ${state.runSoulChips} \u{1FADB}`;
+
+  if (state.currentFloor < 4) {
+    state.elevator = { x: 1500, y: 1500, emoji: '\u{1F6B7}', used: false };
+    state.isRoomCleared = true;
+    state.runSoulChips += 5;
+    addLog(`\u{1FADB} +5 Soul Chips! (${state.runSoulChips} this run)`, 'win');
+    addLog('\u{1F6B7} An elevator to the next floor has arrived! Press [E] to ascend.', 'win');
   } else {
-    display.textContent = `\u{1FADB} ${state.runSoulChips} Soul Chips this run`;
+    const cashChips = Math.floor(state.player.gold / 10);
+    state.runSoulChips += cashChips;
+    state.meta.soulChips += state.runSoulChips;
+    state.gameState = 'victory';
+    const display = document.getElementById('victory-cash-out-display');
+    if (cashChips > 0 || state.runSoulChips > 0) {
+      display.textContent = `Cashed out ${state.player.gold} Gold for ${cashChips} Chips! Total this run: ${state.runSoulChips} \u{1FADB}`;
+    } else {
+      display.textContent = `\u{1FADB} ${state.runSoulChips} Soul Chips this run`;
+    }
+    saveData(state);
+    clearAllRuns();
+    document.getElementById('victory-screen').style.display = 'flex';
   }
-  saveData(state);
-  clearAllRuns();
-  document.getElementById('victory-screen').style.display = 'flex';
 }
 
 export function processProjectileHit(enemy, state, damage = 1, projectile) {
@@ -90,6 +108,16 @@ export function processProjectileHit(enemy, state, damage = 1, projectile) {
 
   if (projectile?.applyStatus) {
     applyStatus(enemy, projectile.applyStatus, 180);
+  }
+
+  if (enemy.isBossPart) {
+    state.boss.hp -= damage;
+    if (state.boss.hp <= 0) {
+      state.enemies = state.enemies.filter(e => e.hp > 0 && !e.isBossPart);
+      defeatBoss(state);
+      return { killed: false, message: `\u{1F5E1}\uFE0F Sisters defeated!`, multiplier: mult };
+    }
+    return { killed: false, message: `\u{1F5E1}\uFE0F Sister HP: ${state.boss.hp}/${state.boss.maxHp}`, multiplier: mult };
   }
 
   enemy.hp -= damage;

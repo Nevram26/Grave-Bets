@@ -80,6 +80,7 @@ export function saveRun(state, slot) {
       visited: { ...state.mapData.visited },
       reachable: [...state.mapData.reachable],
     },
+    currentFloor: state.currentFloor,
     currentNodeIndex: state.currentNodeIndex,
     currentNodeType: state.currentNodeType,
     roomType: state.roomType,
@@ -110,6 +111,8 @@ export function loadRun(state, slot) {
     state.shopkeeper = snap.shopkeeper;
     state.rooms.length = 0; snap.rooms.forEach(r => state.rooms.push(r));
     state.corridors.length = 0; snap.corridors.forEach(c => state.corridors.push(c));
+    state.currentFloor = snap.currentFloor ?? 0;
+    state.elevator = null;
     state.mapData = snap.mapData;
     state.currentNodeIndex = snap.currentNodeIndex;
     state.currentNodeType = snap.currentNodeType;

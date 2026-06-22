@@ -201,11 +201,11 @@ function checkGameOver() {
 }
 
 function checkRoomClear() {
-  if (!state.isRoomCleared && state.enemies.length === 0 && !state.chest && !state.boss) {
+  const aliveEnemies = state.enemies.filter(e => e.hp > 0 && !e.isBossPart);
+  if (!state.isRoomCleared && aliveEnemies.length === 0 && !state.chest && !state.boss) {
     state.isRoomCleared = true;
     let chips = 1;
     if (state.currentNodeType === 'Elite') chips = 5;
-    if (state.boss) chips = 20;
     if (state.currentNodeType !== 'shop') {
       state.runSoulChips += chips;
       addLog(`\u{1FADB} +${chips} Soul Chips! (${state.runSoulChips} this run)`, 'win');
@@ -228,7 +228,8 @@ function updateZoneLabel() {
       break;
     }
   }
-  document.getElementById('zoneLabel').textContent = `CURRENT ZONE: ${zone.toUpperCase()}`;
+  const floor = (state.currentFloor ?? 0) + 1;
+  document.getElementById('zoneLabel').textContent = `FLOOR ${floor} | ${zone.toUpperCase()}`;
   updateUI();
 }
 
@@ -291,6 +292,7 @@ function startGame(charId) {
     applyRelicEffect(r.id);
   }
 
+  state.currentFloor = 0;
   state.runSoulChips = 0;
   state.runFreeRespins = state.meta.upgrades.canRespinChest;
   state.deferredMap = false;
@@ -307,7 +309,7 @@ function startGame(charId) {
   document.getElementById('chest-panel').style.display = 'none';
   document.getElementById('actionLog').innerHTML = '';
 
-  state.mapData = generateMapData();
+  state.mapData = generateMapData(state.currentFloor);
   generateRoom('combat', 'Normal');
 
   document.getElementById('character-select-screen').style.display = 'none';

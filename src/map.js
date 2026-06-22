@@ -1,4 +1,4 @@
-export function generateMapData() {
+export function generateMapData(floorIndex = 0) {
   const NODE_TYPES = ['Normal', 'Elite', 'Treasure', 'Shop'];
   const TYPE_WEIGHTS = [0.55, 0.20, 0.15, 0.10];
 
@@ -15,70 +15,71 @@ export function generateMapData() {
   const rows = [];
   const nodes = [];
 
-  const row0Count = 3;
-  const row0 = [];
-  for (let i = 0; i < row0Count; i++) {
-    const idx = nodes.length;
-    nodes.push({ type: 'Normal', label: 'Normal', connections: [] });
-    row0.push(idx);
-  }
-  rows.push({ nodes: row0 });
-
-  for (let r = 1; r <= 4; r++) {
-    const count = 3 + Math.floor(Math.random() * 3);
-    const row = [];
-    for (let i = 0; i < count; i++) {
+  // Generate 20 rows of 4 nodes each (20 * 4 = 80 nodes)
+  const totalRows = 20;
+  for (let r = 0; r < totalRows; r++) {
+    const rowNodes = [];
+    for (let c = 0; c < 4; c++) {
       const idx = nodes.length;
-      const t = pickType();
-      nodes.push({ type: t, label: t, connections: [] });
-      row.push(idx);
+      const type = r === 0 ? 'Normal' : pickType();
+      nodes.push({ type: type, label: type, connections: [] });
+      rowNodes.push(idx);
     }
-    rows.push({ nodes: row });
+    rows.push({ nodes: rowNodes });
   }
 
-  {
-    const idx = nodes.length;
-    nodes.push({ type: 'Boss', label: 'Boss', connections: [] });
-    rows.push({ nodes: [idx] });
-  }
+  // Add the 1 Boss node on the 21st row (row Index 20)
+  const bossIdx = nodes.length;
+  nodes.push({ type: 'Boss', label: 'Boss', connections: [] });
+  rows.push({ nodes: [bossIdx] });
 
-  for (let r = 0; r < rows.length - 1; r++) {
+  // Generate connections between consecutive rows
+  for (let r = 0; r < totalRows; r++) {
     const currentRow = rows[r].nodes;
     const nextRow = rows[r + 1].nodes;
 
-    for (const nodeIdx of currentRow) {
-      const colIdx = currentRow.indexOf(nodeIdx);
-      const totalCols = currentRow.length;
-      const nextCount = nextRow.length;
-      const ratio = totalCols > 1 ? colIdx / (totalCols - 1) : 0.5;
-      const target = Math.round(ratio * (nextCount - 1));
-      const numChildren = 1 + (Math.random() < 0.5 ? 1 : 0);
-      const children = [nextRow[target]];
-      if (numChildren > 1) {
-        const adj = Math.random() < 0.5 ? -1 : 1;
-        const adjCol = Math.max(0, Math.min(nextCount - 1, target + adj));
-        if (adjCol !== target && !children.includes(nextRow[adjCol])) {
-          children.push(nextRow[adjCol]);
-        }
+    if (nextRow.length === 1) {
+      // Connect each node in the last 4-node row to the single Boss node
+      for (const nodeIdx of currentRow) {
+        nodes[nodeIdx].connections.push(bossIdx);
       }
-      for (const child of children) {
-        if (!nodes[nodeIdx].connections.includes(child)) {
-          nodes[nodeIdx].connections.push(child);
-        }
-      }
-    }
+    } else {
+      // Connect each node in currentRow to 1 or 2 nodes in nextRow
+      for (let c = 0; c < 4; c++) {
+        const nodeIdx = currentRow[c];
+        const targets = [nextRow[c]]; // Always connect straight ahead
 
-    for (let i = 0; i < nextRow.length; i++) {
-      const targetIdx = nextRow[i];
-      const hasParent = currentRow.some(pidx => nodes[pidx].connections.includes(targetIdx));
-      if (!hasParent) {
-        const parentIdx = currentRow[Math.floor(Math.random() * currentRow.length)];
-        if (!nodes[parentIdx].connections.includes(targetIdx)) {
-          nodes[parentIdx].connections.push(targetIdx);
+        // 50% chance to also connect to an adjacent column
+        if (Math.random() < 0.5) {
+          const adjCol = c + (Math.random() < 0.5 ? -1 : 1);
+          if (adjCol >= 0 && adjCol < 4) {
+            targets.push(nextRow[adjCol]);
+          }
+        }
+
+        for (const target of targets) {
+          if (!nodes[nodeIdx].connections.includes(target)) {
+            nodes[nodeIdx].connections.push(target);
+          }
+        }
+      }
+
+      // Guarantee every node in nextRow has at least one incoming connection
+      for (let c = 0; c < 4; c++) {
+        const targetIdx = nextRow[c];
+        const hasParent = currentRow.some(pidx => nodes[pidx].connections.includes(targetIdx));
+        if (!hasParent) {
+          const potentialParents = [currentRow[c]];
+          if (c > 0) potentialParents.push(currentRow[c - 1]);
+          if (c < 3) potentialParents.push(currentRow[c + 1]);
+          const parentIdx = potentialParents[Math.floor(Math.random() * potentialParents.length)];
+          if (!nodes[parentIdx].connections.includes(targetIdx)) {
+            nodes[parentIdx].connections.push(targetIdx);
+          }
         }
       }
     }
   }
 
-  return { nodes, rows, visited: { 0: true }, reachable: [] };
+  return { nodes, rows, visited: {}, reachable: [] };
 }

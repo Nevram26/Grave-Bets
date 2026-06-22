@@ -41,7 +41,7 @@ export function renderMapUI() {
   const padding = 60;
   const usableW = svgW - padding * 2;
   const usableH = svgH - padding * 2;
-  const nodeRadius = 24;
+  const nodeRadius = 14;
 
   const reachable = new Set();
 
@@ -125,7 +125,7 @@ export function renderMapUI() {
     icon.setAttribute('y', n.cy + 1);
     icon.setAttribute('text-anchor', 'middle');
     icon.setAttribute('dominant-baseline', 'central');
-    icon.setAttribute('font-size', '18');
+    icon.setAttribute('font-size', '12');
     icon.setAttribute('pointer-events', 'none');
     icon.textContent = NODE_ICONS[n.type] || '\u2753';
     g.appendChild(icon);

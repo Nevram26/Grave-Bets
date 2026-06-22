@@ -1,6 +1,9 @@
 import { state } from './state.js';
 import { RELICS } from './relics.js';
 import { updateUI, addLog } from './hud.js';
+import { FLOORS, ENEMY_TYPES, BOSS_REGISTRY, THEME_PALETTES } from './data.js';
+import { generateMapData } from './map.js';
+import { renderMapUI } from './ui.js';
 
 export function applyRelicEffect(id) {
   const p = state.player;
@@ -26,6 +29,17 @@ export function generateRoom(type, nodeType = 'Normal') {
   state.corridors.length = 0;
   state.chest = null;
   state.boss = null;
+  state.bossState.mechanic = null;
+  state.bossState.leverActive = false;
+  state.bossState.leverTimer = 0;
+  state.bossState.sisterElite = null;
+  state.bossState.sisterSwapTimer = 0;
+  state.bossState.lockdownWalls = [];
+  state.bossState.beamTelegraph = null;
+  state.bossState.clones = [];
+  state.bossState.realGlow = 0;
+  state.bossState.midasPhase = 1;
+  state.elevator = null;
   state.shopRelics.length = 0;
   state.shopkeeper = null;
   state.isRoomCleared = false;
@@ -39,34 +53,71 @@ export function generateRoom(type, nodeType = 'Normal') {
   state.camera.targetX = 1500;
   state.camera.targetY = 1500;
 
+  const floor = FLOORS[state.currentFloor] || FLOORS[0];
+  const palette = THEME_PALETTES[floor.theme] || THEME_PALETTES.Industrial;
+
   if (type === 'combat') {
-    state.roomType = 'Penny Slots';
-    state.rooms = [{ name: 'Penny Slots', x: 1000, y: 1000, w: 1000, h: 1000, bgColor: '#080510', borderColor: '#8b5cf6', accentColor: '#7c3aed', features: [] }];
+    state.roomType = floor.name;
+    state.rooms = [{
+      name: floor.name, x: 1000, y: 1000, w: 1000, h: 1000,
+      bgColor: palette.bg, borderColor: palette.border,
+      accentColor: palette.accent, features: [],
+    }];
 
     if (nodeType === 'Boss') {
-      state.roomType = 'The Penthouse';
-      state.rooms[0].name = 'The Penthouse';
-      state.rooms[0].bgColor = '#0a0015';
-      state.rooms[0].borderColor = '#a855f7';
-      state.rooms[0].accentColor = '#7e22ce';
-      state.boss = { x: 1500, y: 1500, emoji: '\u{1F479}', hp: 100, maxHp: 100, speed: 1.5, attackTimer: 0, phase: 1, radius: 40, flashTimer: 0, suit: 'clubs', statusEffects: [] };
+      const bossDef = BOSS_REGISTRY[floor.boss];
+      state.rooms[0].name = `BOSS: ${floor.boss}`;
+      state.boss = {
+        x: 1500, y: 1500,
+        emoji: bossDef.emoji,
+        hp: bossDef.hp, maxHp: bossDef.maxHp,
+        speed: bossDef.speed, phase2Speed: bossDef.phase2Speed,
+        attackTimer: 0, phase: 1, radius: bossDef.radius,
+        flashTimer: 0, suit: bossDef.suit, statusEffects: [],
+        mechanic: bossDef.mechanic,
+      };
+      state.bossState.mechanic = bossDef.mechanic;
+
+      if (floor.boss === 'The Card-Shark Sisters') {
+        const blade = {
+          x: 1400, y: 1400, emoji: '\u{1F5E1}\uFE0F',
+          hp: 999, speed: 2.5, radius: 24, type: 'melee',
+          cooldown: 0, attackCooldown: 0, suit: 'spades',
+          statusEffects: [], isBossPart: true, bossPartKey: 'blade',
+          attackReady: false,
+        };
+        const gun = {
+          x: 1600, y: 1600, emoji: '\u{1F52B}',
+          hp: 999, speed: 0, radius: 22, type: 'ranged',
+          cooldown: 0, attackCooldown: 0, suit: 'spades',
+          statusEffects: [], isBossPart: true, bossPartKey: 'gun',
+          attackReady: false,
+        };
+        state.enemies.push(blade, gun);
+        state.bossState.sisterElite = 'blade';
+        state.bossState.sisterSwapTimer = 900;
+      }
     } else {
       const count = nodeType === 'Elite' ? (5 + Math.floor(Math.random() * 2)) : (3 + Math.floor(Math.random() * 2));
+      const pool = floor.enemyPool;
       for (let i = 0; i < count; i++) {
-        const isRanged = Math.random() < 0.5;
+        const name = pool[Math.floor(Math.random() * pool.length)];
+        const template = ENEMY_TYPES[name];
+        if (!template) continue;
         const suitRoll = Math.random();
         const enemySuit = suitRoll < 0.35 ? 'clubs' : suitRoll < 0.65 ? 'diamonds' : suitRoll < 0.85 ? 'spades' : 'hearts';
+        const hpMult = nodeType === 'Elite' ? 2 : 1;
         state.enemies.push({
           x: 1200 + Math.random() * 600,
           y: 1200 + Math.random() * 600,
-          emoji: isRanged ? '\u{1F574}\uFE0F' : '\u{1F480}',
-          hp: isRanged ? (nodeType === 'Elite' ? 2 : 1) : (nodeType === 'Elite' ? 4 : 2),
-          speed: isRanged ? 0 : 2,
-          radius: 20,
-          type: isRanged ? 'ranged' : 'melee',
+          emoji: template.emoji,
+          hp: template.hp * hpMult,
+          speed: template.speed,
+          radius: template.radius,
+          type: template.type,
           cooldown: 0,
           attackCooldown: 0,
-          suit: isRanged ? 'diamonds' : enemySuit,
+          suit: template.type === 'ranged' ? 'diamonds' : enemySuit,
           statusEffects: [],
         });
       }
@@ -175,6 +226,17 @@ export function respinChestRelic() {
   updateUI();
 }
 
+export function transitionFloor() {
+  if (state.currentFloor >= 4) return;
+  state.currentFloor++;
+  const floor = FLOORS[state.currentFloor];
+  addLog(`\u{1F4C8} Ascending to ${floor.name}!`, 'win');
+  state.mapData = generateMapData(state.currentFloor);
+  state.currentNodeIndex = -1;
+  state.isPaused = true;
+  renderMapUI();
+}
+
 export function handleInteract() {
   for (const relic of state.shopRelics) {
     if (Math.hypot(state.player.x - relic.x, state.player.y - relic.y) < 50) {
@@ -197,6 +259,15 @@ export function handleInteract() {
       chest.offeredRelic = pickRandomRelic();
     }
     showChestPanel();
+    return true;
+  }
+
+  if (state.elevator && Math.hypot(state.player.x - state.elevator.x, state.player.y - state.elevator.y) < 50) {
+    if (state.currentFloor < 4) {
+      transitionFloor();
+    } else {
+      addLog('\u{1F451} Midas Vance awaits... this is the final floor!', 'win');
+    }
     return true;
   }
 

@@ -1,6 +1,7 @@
 import { state } from './state.js';
 import { SUIT_ICONS } from './suits.js';
 import { CHARACTERS } from './characters.js';
+import { FLOORS } from './data.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -214,6 +215,103 @@ function drawObstacles() {
   }
 }
 
+function drawBossGlow() {
+  if (!state.boss || state.bossState.realGlow <= 0) return;
+  const b = state.boss;
+  ctx.save();
+  ctx.strokeStyle = `rgba(168,85,247,${0.3 + Math.sin(state.bossState.realGlow * 0.1) * 0.2})`;
+  ctx.lineWidth = 4;
+  ctx.shadowColor = '#a855f7';
+  ctx.shadowBlur = 30;
+  ctx.beginPath();
+  ctx.arc(b.x, b.y, b.radius + 10, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawBeamTelegraph() {
+  const bt = state.bossState.beamTelegraph;
+  if (!bt) return;
+  const b = state.boss;
+  if (!b) return;
+  const len = 600;
+  ctx.save();
+  ctx.strokeStyle = `rgba(239,68,68,${0.4 + Math.random() * 0.3})`;
+  ctx.lineWidth = 6;
+  ctx.shadowColor = '#ef4444';
+  ctx.shadowBlur = 20;
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x + Math.cos(bt.angle) * len, b.y + Math.sin(bt.angle) * len);
+  ctx.stroke();
+  ctx.restore();
+  ctx.save();
+  ctx.strokeStyle = `rgba(239,68,68,${0.2 + Math.random() * 0.2})`;
+  ctx.lineWidth = 18;
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x + Math.cos(bt.angle) * len, b.y + Math.sin(bt.angle) * len);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawAureliaClones() {
+  for (const clone of state.bossState.clones) {
+    if (!state.boss) continue;
+    ctx.globalAlpha = 0.6;
+    ctx.font = `48px ${EMOJI_FONT}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(state.boss.emoji, clone.x, clone.y);
+    ctx.globalAlpha = 1;
+  }
+}
+
+function drawThemeEffects() {
+  const theme = FLOORS[state.currentFloor]?.theme;
+  if (!theme || state.rooms.length === 0) return;
+  const room = state.rooms[0];
+  if (theme === 'Industrial') {
+    if (Math.random() < 0.02) {
+      ctx.fillStyle = 'rgba(139,92,246,0.03)';
+      ctx.fillRect(room.x, room.y, room.w, room.h);
+    }
+  } else if (theme === 'Neon') {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,20,147,0.08)';
+    ctx.lineWidth = 2;
+    ctx.shadowColor = '#ff1493';
+    ctx.shadowBlur = 30;
+    ctx.strokeRect(room.x + 4, room.y + 4, room.w - 8, room.h - 8);
+    ctx.restore();
+  } else if (theme === 'Polished Gold') {
+    if (Math.random() < 0.05) {
+      const sx = room.x + Math.random() * room.w;
+      const sy = room.y + Math.random() * room.h;
+      ctx.fillStyle = 'rgba(255,215,0,0.15)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 3 + Math.random() * 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else if (theme === 'Decaying Green') {
+    if (Math.random() < 0.03) {
+      ctx.fillStyle = 'rgba(74,103,65,0.04)';
+      const fx = room.x + Math.random() * room.w;
+      const fy = room.y + Math.random() * room.h;
+      ctx.beginPath();
+      ctx.arc(fx, fy, 40 + Math.random() * 60, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  } else if (theme === 'Stark White') {
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,255,255,0.03)';
+    ctx.shadowColor = '#00ffff';
+    ctx.shadowBlur = 40;
+    ctx.fillRect(room.x, room.y, room.w, room.h);
+    ctx.restore();
+  }
+}
+
 function drawEnemies() {
   ctx.font = `48px ${EMOJI_FONT}`;
   ctx.textAlign = 'center';
@@ -245,6 +343,27 @@ function drawEnemies() {
     ctx.globalAlpha = 1;
     drawSuitIcon(state.boss, state.boss.x, state.boss.y - 60);
     drawStatusIndicators(state.boss, state.boss.x, state.boss.y + 50);
+  }
+}
+
+function drawElevator() {
+  if (!state.elevator) return;
+  const el = state.elevator;
+  ctx.font = '48px Segoe UI Emoji';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = '#a855f7';
+  ctx.shadowBlur = 20;
+  ctx.fillText(el.emoji, el.x, el.y);
+  ctx.shadowBlur = 0;
+  const dist = Math.hypot(state.player.x - el.x, state.player.y - el.y);
+  if (dist < 80 && !el.used) {
+    ctx.font = '18px Courier New';
+    ctx.fillStyle = '#a855f7';
+    ctx.shadowColor = '#a855f7';
+    ctx.shadowBlur = 6;
+    ctx.fillText('[E] Take Elevator', el.x, el.y + 50);
+    ctx.shadowBlur = 0;
   }
 }
 
@@ -333,9 +452,16 @@ function drawProjectiles() {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (const proj of state.enemyProjectiles) {
-    ctx.fillStyle = '#f43f5e';
-    ctx.shadowColor = '#f43f5e';
-    ctx.shadowBlur = 8;
+    if (proj.applyStatusOnHit) {
+      const colors = { burn: '#f97316', slow: '#3b82f6', blind: '#eab308', bleed: '#ef4444' };
+      ctx.fillStyle = colors[proj.applyStatusOnHit] || '#a855f7';
+      ctx.shadowColor = ctx.fillStyle;
+      ctx.shadowBlur = 14;
+    } else {
+      ctx.fillStyle = '#f43f5e';
+      ctx.shadowColor = '#f43f5e';
+      ctx.shadowBlur = 8;
+    }
     ctx.fillText('\uD83C\uDFB2', proj.x, proj.y);
     ctx.shadowBlur = 0;
   }
@@ -510,9 +636,14 @@ export function draw() {
   drawBackground();
   drawCorridors();
   drawRooms();
+  drawThemeEffects();
   drawObstacles();
   drawEnemies();
+  drawBossGlow();
+  drawAureliaClones();
+  drawBeamTelegraph();
   drawInteractables();
+  drawElevator();
   drawProjectiles();
   drawEffects();
   drawPlayer();
