@@ -40,10 +40,54 @@ var camera := {
 # Mouse state
 var mouse := { "screenX": 0, "screenY": 0, "worldX": 1500.0, "worldY": 1500.0 }
 
-# Collections
-var rooms: Array[Dictionary] = []
-var corridors: Array[Dictionary] = []
-var enemies: Array[Dictionary] = []
+# Collections (defaults mirror src/state.js)
+var rooms: Array[Dictionary] = [
+	{
+		"name": "VIP Lounge",
+		"x": 1000, "y": 1000, "w": 1000, "h": 1000,
+		"bgColor": "#0f050b", "borderColor": "#ec4899", "accentColor": "#db2777",
+		"features": [
+			{ "type": "table", "x": 1300, "y": 1300, "r": 50 },
+			{ "type": "table", "x": 1700, "y": 1300, "r": 50 },
+			{ "type": "table", "x": 1500, "y": 1700, "r": 60 },
+			{ "type": "pillar", "x": 1100, "y": 1100, "r": 20 },
+			{ "type": "pillar", "x": 1900, "y": 1100, "r": 20 },
+			{ "type": "pillar", "x": 1100, "y": 1900, "r": 20 },
+			{ "type": "pillar", "x": 1900, "y": 1900, "r": 20 },
+		]
+	},
+	{
+		"name": "Slot Machine Alley",
+		"x": 1150, "y": 200, "w": 700, "h": 800,
+		"bgColor": "#080510", "borderColor": "#8b5cf6", "accentColor": "#7c3aed",
+		"features": [
+			{ "type": "slot_row", "x": 1250, "y": 300, "w": 60, "h": 300 },
+			{ "type": "slot_row", "x": 1450, "y": 300, "w": 60, "h": 300 },
+			{ "type": "slot_row", "x": 1650, "y": 300, "w": 60, "h": 300 },
+			{ "type": "slot_row", "x": 1250, "y": 650, "w": 60, "h": 250 },
+			{ "type": "slot_row", "x": 1650, "y": 650, "w": 60, "h": 250 },
+		]
+	},
+	{
+		"name": "The Gold Vault",
+		"x": 150, "y": 1100, "w": 850, "h": 800,
+		"bgColor": "#020d11", "borderColor": "#06b6d4", "accentColor": "#0891b2",
+		"features": [
+			{ "type": "vault_safe", "x": 300, "y": 1300, "w": 80, "h": 80 },
+			{ "type": "vault_safe", "x": 300, "y": 1600, "w": 80, "h": 80 },
+			{ "type": "laser_grid", "x1": 500, "y1": 1100, "x2": 500, "y2": 1900 },
+			{ "type": "laser_grid", "x1": 700, "y1": 1100, "x2": 700, "y2": 1900 },
+		]
+	}
+]
+var corridors: Array[Dictionary] = [
+	{ "x": 1450, "y": 1000, "w": 100, "h": 100, "name": "VIP Lounge - Alley Connector" },
+	{ "x": 1000, "y": 1450, "w": 100, "h": 100, "name": "VIP Lounge - Vault Connector" }
+]
+var enemies: Array[Dictionary] = [
+	{ "x": 1400, "y": 1300, "emoji": "💀", "hp": 2, "speed": 2, "radius": 20, "type": "melee", "cooldown": 0, "suit": "clubs", "statusEffects": [] },
+	{ "x": 1650, "y": 1500, "emoji": "🕴️", "hp": 1, "speed": 0, "radius": 20, "type": "ranged", "cooldown": 0, "suit": "diamonds", "statusEffects": [] }
+]
 var enemyProjectiles: Array[Dictionary] = []
 var projectiles: Array[Dictionary] = []
 var visualEffects: Array[Dictionary] = []
@@ -60,6 +104,7 @@ var boss: Dictionary = {}
 var bossState: Dictionary = {}
 var elevator = null
 var currentFloor := 0
+var chest = null
 var shopRelics: Array = []
 var shopkeeper = null
 var mapData: Dictionary = { "nodes": [], "rows": [], "visited": {}, "reachable": [] }
@@ -127,6 +172,7 @@ func reset() -> void:
 	bossState = {}
 	elevator = null
 	currentFloor = 0
+	chest = null
 	shopRelics.clear()
 	shopkeeper = null
 	mapData = { "nodes": [], "rows": [], "visited": {}, "reachable": [] }
