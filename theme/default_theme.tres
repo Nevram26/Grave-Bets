@@ -1,103 +1,4 @@
-[gd_resource type="Theme" load_steps=26 format=3]
-
-[sub_resource type="SystemFont" id="SystemFont_default"]
-font_names = PackedStringArray("Courier New", "Consolas", "monospace")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
-bg_color = Color(0.078, 0.078, 0.157, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.216, 0.255, 0.318, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(0.122, 0.122, 0.227, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.655, 0.545, 0.98, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
-bg_color = Color(0.184, 0.184, 0.275, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.769, 0.71, 0.996, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_charcard_normal"]
-bg_color = Color(0.078, 0.078, 0.157, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.216, 0.255, 0.318, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_charcard_hover"]
-bg_color = Color(0.12, 0.12, 0.24, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.655, 0.545, 0.98, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_charcard_pressed"]
-bg_color = Color(0.2, 0.2, 0.32, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.769, 0.71, 0.996, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_takebtn_normal"]
-bg_color = Color(0.008, 0.051, 0.067, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.063, 0.725, 0.506, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_takebtn_hover"]
-bg_color = Color(0.024, 0.306, 0.231, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.204, 0.827, 0.6, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[gd_resource type="Theme" format=3 uid="uid://dmfhhtg66ccv2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_respbtn_normal"]
 bg_color = Color(0.008, 0.051, 0.067, 1)
@@ -111,102 +12,6 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_respbtn_hover"]
-bg_color = Color(0.271, 0.102, 0.012, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.984, 0.749, 0.141, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quitbtn_normal"]
-bg_color = Color(0.078, 0.078, 0.157, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.498, 0.114, 0.114, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_quitbtn_hover"]
-bg_color = Color(0.165, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.863, 0.149, 0.149, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playagain_red_normal"]
-bg_color = Color(0.102, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.863, 0.149, 0.149, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playagain_red_hover"]
-bg_color = Color(0.165, 0, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.937, 0.267, 0.267, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playagain_gold_normal"]
-bg_color = Color(0.102, 0.078, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.961, 0.624, 0.043, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playagain_gold_hover"]
-bg_color = Color(0.165, 0.125, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.984, 0.749, 0.141, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_saveslot_normal"]
-bg_color = Color(0.039, 0.039, 0.102, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.231, 0.51, 0.965, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_saveslot_hover"]
 bg_color = Color(0.102, 0.102, 0.227, 1)
 border_width_left = 1
@@ -219,65 +24,17 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_default"]
-bg_color = Color(0.035, 0.016, 0.039, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.227, 0.122, 0.071, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_lounge"]
-bg_color = Color(0.035, 0.016, 0.039, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.984, 0.749, 0.141, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_pause"]
-bg_color = Color(0.039, 0.039, 0.102, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.655, 0.545, 0.98, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_chest"]
-bg_color = Color(0.008, 0.051, 0.067, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.024, 0.714, 0.831, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_gameover"]
-bg_color = Color(0.078, 0, 0, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.498, 0.114, 0.114, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_saveslot_normal"]
+bg_color = Color(0.039, 0.039, 0.102, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.231, 0.51, 0.965, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_victory"]
 bg_color = Color(0.078, 0.059, 0, 0.9)
@@ -310,109 +67,22 @@ corner_radius_top_right = 7
 corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 
+[sub_resource type="SystemFont" id="SystemFont_default"]
+font_names = PackedStringArray("Courier New", "Consolas", "monospace")
+
 [resource]
 default_font = SubResource("SystemFont_default")
 default_font_size = 16
-
 Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
 Button/colors/font_hover_color = Color(1, 1, 1, 1)
 Button/colors/font_pressed_color = Color(0.937, 0.937, 0.937, 1)
-Button/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
-Button/styles/normal = SubResource("StyleBoxFlat_btn_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_btn_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-Button/styles/disabled = SubResource("StyleBoxFlat_btn_normal")
-
-Label/colors/font_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_respbtn_normal")
+Button/styles/hover = SubResource("StyleBoxFlat_saveslot_hover")
+Button/styles/normal = SubResource("StyleBoxFlat_saveslot_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_saveslot_hover")
+Label/colors/font_color = Color(1, 0.267, 0.267, 1)
 Label/font_sizes/font_size = 16
-
-Panel/styles/panel = SubResource("StyleBoxFlat_panel_default")
-
+Panel/styles/panel = SubResource("StyleBoxFlat_panel_victory")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_progress_bg")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_progress_fill")
-
-Button/styles/normal = SubResource("StyleBoxFlat_charcard_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_charcard_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_charcard_pressed")
-Button/styles/disabled = SubResource("StyleBoxFlat_charcard_normal")
-Button/types/CharCard = ""
-
-Button/styles/normal = SubResource("StyleBoxFlat_takebtn_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_takebtn_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_takebtn_hover")
-Button/styles/disabled = SubResource("StyleBoxFlat_takebtn_normal")
-Button/types/ChestTakeButton = ""
-
-Button/styles/normal = SubResource("StyleBoxFlat_respbtn_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_respbtn_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_respbtn_hover")
-Button/styles/disabled = SubResource("StyleBoxFlat_respbtn_normal")
-Button/types/ChestRespinButton = ""
-
-Button/styles/normal = SubResource("StyleBoxFlat_quitbtn_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_quitbtn_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_quitbtn_hover")
-Button/types/QuitButton = ""
-
-Button/styles/normal = SubResource("StyleBoxFlat_playagain_red_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_playagain_red_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_playagain_red_hover")
-Button/types/PlayAgainRedButton = ""
-
-Button/styles/normal = SubResource("StyleBoxFlat_playagain_gold_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_playagain_gold_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_playagain_gold_hover")
-Button/types/PlayAgainGoldButton = ""
-
-Button/styles/normal = SubResource("StyleBoxFlat_saveslot_normal")
-Button/styles/hover = SubResource("StyleBoxFlat_saveslot_hover")
-Button/styles/pressed = SubResource("StyleBoxFlat_saveslot_hover")
-Button/types/SaveSlotButton = ""
-
-Panel/styles/panel = SubResource("StyleBoxFlat_panel_lounge")
-Panel/types/LoungePanel = ""
-
-Panel/styles/panel = SubResource("StyleBoxFlat_panel_pause")
-Panel/types/PausePanel = ""
-
-Panel/styles/panel = SubResource("StyleBoxFlat_panel_chest")
-Panel/types/ChestPanel = ""
-
-Panel/styles/panel = SubResource("StyleBoxFlat_panel_gameover")
-Panel/types/GameOverPanel = ""
-
-Panel/styles/panel = SubResource("StyleBoxFlat_panel_victory")
-Panel/types/VictoryPanel = ""
-
-Label/colors/font_color = Color(1, 0.267, 0.267, 1)
-Label/types/HealthLabel = ""
-
-Label/colors/font_color = Color(1, 0.843, 0, 1)
-Label/types/GoldLabel = ""
-
-Label/colors/font_color = Color(0.063, 0.725, 0.506, 1)
-Label/types/ArmorLabel = ""
-
-Label/colors/font_color = Color(0.753, 0.518, 0.988, 1)
-Label/types/SuitLabel = ""
-
-Label/colors/font_color = Color(0.22, 0.745, 0.973, 1)
-Label/types/ChipsLabel = ""
-
-Label/colors/font_color = Color(0.655, 0.545, 0.98, 1)
-Label/types/CharacterLabel = ""
-
-Label/colors/font_color = Color(0.984, 0.749, 0.141, 1)
-Label/types/ZoneLabel = ""
-
-Label/colors/font_color = Color(0.533, 0.667, 0.8, 1)
-Label/types/LogInfoLabel = ""
-
-Label/colors/font_color = Color(1, 0.843, 0, 1)
-Label/types/LogWinLabel = ""
-
-Label/colors/font_color = Color(1, 0.267, 0.267, 1)
-Label/types/LogLoseLabel = ""
-
-Label/colors/font_color = Color(1, 0.267, 0.267, 1)
-Label/types/BossNameLabel = ""

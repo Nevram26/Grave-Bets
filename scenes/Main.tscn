@@ -1,20 +1,35 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cl6w4lnxax6oy"]
 
-[ext_resource type="Script" path="res://scripts/Main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/CameraController.gd" id="2_camera"]
+[ext_resource type="Script" uid="uid://p6yr0nwkidfv" path="res://scripts/Main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://bv05x6yd1wa04" path="res://scripts/CameraController.gd" id="2_camera"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=1272800607]
 script = ExtResource("1_main")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1481795498]
 script = ExtResource("2_camera")
 
-[node name="GameWorld" type="Node2D" parent="."]
+[node name="GameWorld" type="Node2D" parent="." unique_id=772111846]
 visible = false
 
-[node name="Lounge" type="CanvasLayer" parent="."]
+[node name="Lounge" type="CanvasLayer" parent="." unique_id=1783407949]
 
-[node name="Control" type="Control" parent="Lounge"]
+[node name="Control" type="Control" parent="Lounge" unique_id=1669862286]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterSelect" type="CanvasLayer" parent="." unique_id=1910064038]
+visible = false
+
+[node name="Control" type="Control" parent="CharacterSelect" unique_id=874641273]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,10 +37,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CharacterSelect" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=621147875]
 visible = false
 
-[node name="Control" type="Control" parent="CharacterSelect"]
+[node name="Control" type="Control" parent="HUD" unique_id=1016511582]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,10 +48,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="PauseMenu" type="CanvasLayer" parent="." unique_id=712517287]
 visible = false
 
-[node name="Control" type="Control" parent="HUD"]
+[node name="Control" type="Control" parent="PauseMenu" unique_id=1298664760]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,10 +59,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PauseMenu" type="CanvasLayer" parent="."]
+[node name="GameOverScreen" type="CanvasLayer" parent="." unique_id=121694506]
 visible = false
 
-[node name="Control" type="Control" parent="PauseMenu"]
+[node name="Control" type="Control" parent="GameOverScreen" unique_id=248469498]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -55,21 +70,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameOverScreen" type="CanvasLayer" parent="."]
+[node name="VictoryScreen" type="CanvasLayer" parent="." unique_id=1324779208]
 visible = false
 
-[node name="Control" type="Control" parent="GameOverScreen"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VictoryScreen" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="Control" type="Control" parent="VictoryScreen"]
+[node name="Control" type="Control" parent="VictoryScreen" unique_id=1355795250]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
