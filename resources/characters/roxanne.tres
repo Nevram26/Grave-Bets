@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/CharacterResource.gd" id="1_5l3j"]
+
+[resource]
+script = ExtResource("1_5l3j")
+id = "roxanne"
+char_name = "Madam Roxanne"
+emoji = "🧙‍♀️"
+description = "Shield Tank — Blackjack-stacking melee tank."
+attack_type = "melee"
+radius = 22.0
+speed = 4.0
+hp = 16
+max_hp = 16
+stats = {
+"VIT": 16,
+"PWR": 1,
+"ARM": 3,
+"SPD": 4,
+"JCE": 0,
+"LCK": 1
+}
+suit = "hearts"
+active_name = "Double Down"
+active_description = "Double blackjack gain for 4s. At 21 = AOE stun blast."
+passive_description = "Enemy hits stack blackjack. At 21 = AOE blast. Bust (over 21) = 3s silence."
+melee_range = 60.0

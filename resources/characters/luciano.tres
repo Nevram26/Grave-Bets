@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/CharacterResource.gd" id="1_5l3j"]
+
+[resource]
+script = ExtResource("1_5l3j")
+id = "luciano"
+char_name = "\"Lucky\" Luciano"
+emoji = "🧙‍♂️"
+description = "Roulette Gun — RNG bullets with stacking buffs."
+attack_type = "ranged"
+radius = 16.0
+speed = 5.0
+hp = 10
+max_hp = 10
+stats = {
+"VIT": 10,
+"PWR": 2,
+"ARM": 0,
+"SPD": 5,
+"JCE": 0,
+"LCK": 1
+}
+suit = "diamonds"
+active_name = "Russian Roulette"
+active_description = "Next shot GREEN, then 6 forced RED shots."
+passive_description = "Black hits stack +5% Crit. Red hits stack +10% SPD. 3 max each, reset after 6 shots."
+melee_range = 60.0
