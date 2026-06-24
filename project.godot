@@ -2,6 +2,8 @@
 ; Godot version: 4.7.stable
 ; Automatically generated for Grave Bets migration from vanilla JS/HTML5 Canvas.
 
+config_version=5
+
 [application]
 
 config/name="Grave Bets"
